@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.sunflower
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,18 +24,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ShareCompat
+import androidx.core.content.ContextCompat
+import androidx.core.util.Consumer
+import androidx.core.view.doOnLayout
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.window.DeviceState
+import androidx.window.WindowLayoutInfo
+import androidx.window.WindowManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.samples.apps.sunflower.data.Plant
 import com.google.samples.apps.sunflower.databinding.FragmentPlantDetailBinding
 import com.google.samples.apps.sunflower.utilities.InjectorUtils
 import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
+import kotlinx.android.synthetic.main.fragment_plant_detail.detail_image
+import kotlinx.android.synthetic.main.fragment_plant_detail.plant_detail_scrollview
 
 /**
  * A fragment representing a single Plant detail screen.
@@ -109,6 +120,45 @@ class PlantDetailFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding.root
+    }
+
+    private lateinit var windowManager: WindowManager
+    private val layoutStatChangeCallback = LayoutStateChangeCallback()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().window.decorView.doOnLayout {
+            updateView()
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        windowManager = WindowManager(requireActivity(), null)
+        windowManager.registerLayoutChangeCallback(
+            ContextCompat.getMainExecutor(requireActivity()),
+            layoutStatChangeCallback
+        )
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        windowManager.unregisterLayoutChangeCallback(layoutStatChangeCallback)
+
+    }
+
+    private fun updateView() {
+        val isFlipped = windowManager.deviceState.posture == DeviceState.POSTURE_FLIPPED
+        plant_detail_scrollview.isGone = isFlipped
+
+        // Not getting any callback here when hinge1 value changes.
+    }
+
+    inner class LayoutStateChangeCallback : Consumer<WindowLayoutInfo> {
+        override fun accept(newLayoutInfo: WindowLayoutInfo) {
+            updateView()
+        }
     }
 
     // Helper function for calling a share functionality.
