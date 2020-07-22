@@ -22,8 +22,6 @@ import androidx.databinding.DataBindingUtil.setContentView
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.google.android.material.tabs.TabLayout
-import com.google.samples.apps.sunflower.adapters.MY_GARDEN_PAGE_INDEX
-import com.google.samples.apps.sunflower.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.sunflower.databinding.ActivityGardenBinding
 
 class GardenActivity : AppCompatActivity() {
@@ -58,8 +56,8 @@ class GardenActivity : AppCompatActivity() {
 
     private fun action(position: Int): NavDirections {
         return when(position) {
-            MY_GARDEN_PAGE_INDEX -> NavHostDirections.actionMyGarden()
-            PLANT_LIST_PAGE_INDEX -> NavHostDirections.actionPlantsList()
+            0 -> NavHostDirections.actionMyGarden()
+            1 -> NavHostDirections.actionPlantsList()
             else -> throw IndexOutOfBoundsException()
         }
     }
@@ -67,16 +65,16 @@ class GardenActivity : AppCompatActivity() {
 
     private fun getTabIcon(position: Int): Int {
         return when (position) {
-            MY_GARDEN_PAGE_INDEX -> R.drawable.garden_tab_selector
-            PLANT_LIST_PAGE_INDEX -> R.drawable.plant_list_tab_selector
+            0 -> R.drawable.garden_tab_selector
+            1 -> R.drawable.plant_list_tab_selector
             else -> throw IndexOutOfBoundsException()
         }
     }
 
     private fun getTabTitle(position: Int): String? {
         return when (position) {
-            MY_GARDEN_PAGE_INDEX -> getString(R.string.my_garden_title)
-            PLANT_LIST_PAGE_INDEX -> getString(R.string.plant_list_title)
+            0 -> getString(R.string.my_garden_title)
+            1 -> getString(R.string.plant_list_title)
             else -> throw IndexOutOfBoundsException()
         }
     }
