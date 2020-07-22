@@ -19,12 +19,65 @@ package com.google.samples.apps.sunflower
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil.setContentView
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
+import com.google.android.material.tabs.TabLayout
+import com.google.samples.apps.sunflower.adapters.MY_GARDEN_PAGE_INDEX
+import com.google.samples.apps.sunflower.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.sunflower.databinding.ActivityGardenBinding
 
 class GardenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView<ActivityGardenBinding>(this, R.layout.activity_garden)
+        val binding = setContentView<ActivityGardenBinding>(this, R.layout.activity_garden)
+        val tabLayout = binding.tabs
+
+
+        arrayOf(tabLayout.newTab(), tabLayout.newTab())
+            .mapIndexed { position, tab ->
+                tab.setIcon(getTabIcon(position))
+                tab.text = getTabTitle(position)
+                tabLayout.addTab(tab)
+            }
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val controller = findNavController(R.id.nav_host)
+                controller.navigate(action(tab.position))
+            }
+        })
+    }
+
+    private fun action(position: Int): NavDirections {
+        return when(position) {
+            MY_GARDEN_PAGE_INDEX -> NavHostDirections.actionMyGarden()
+            PLANT_LIST_PAGE_INDEX -> NavHostDirections.actionPlantsList()
+            else -> throw IndexOutOfBoundsException()
+        }
+    }
+
+
+    private fun getTabIcon(position: Int): Int {
+        return when (position) {
+            MY_GARDEN_PAGE_INDEX -> R.drawable.garden_tab_selector
+            PLANT_LIST_PAGE_INDEX -> R.drawable.plant_list_tab_selector
+            else -> throw IndexOutOfBoundsException()
+        }
+    }
+
+    private fun getTabTitle(position: Int): String? {
+        return when (position) {
+            MY_GARDEN_PAGE_INDEX -> getString(R.string.my_garden_title)
+            PLANT_LIST_PAGE_INDEX -> getString(R.string.plant_list_title)
+            else -> throw IndexOutOfBoundsException()
+        }
     }
 }

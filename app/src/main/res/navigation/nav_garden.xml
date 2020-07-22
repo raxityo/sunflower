@@ -18,22 +18,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/view_pager_fragment">
+    android:id="@+id/nav_host"
+    app:startDestination="@id/garden_fragment">
 
     <fragment
-        android:id="@+id/view_pager_fragment"
-        android:name="com.google.samples.apps.sunflower.HomeViewPagerFragment"
-        tools:layout="@layout/fragment_view_pager">
+        android:id="@+id/garden_fragment"
+        android:name="com.google.samples.apps.sunflower.GardenFragment"
+        tools:layout="@layout/fragment_garden"/>
 
-        <action
-                android:id="@+id/action_view_pager_fragment_to_plant_detail_fragment"
-                app:destination="@id/plant_detail_fragment"
-                app:enterAnim="@anim/slide_in_right"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
-
-    </fragment>
+    <fragment
+        android:id="@+id/plants_list_fragment"
+        android:name="com.google.samples.apps.sunflower.PlantListFragment"
+        tools:layout="@layout/fragment_garden" />
 
     <fragment
         android:id="@+id/plant_detail_fragment"
@@ -44,5 +40,22 @@
             android:name="plantId"
             app:argType="string" />
     </fragment>
+
+    <action
+        android:id="@+id/action_my_garden"
+        app:destination="@id/garden_fragment"/>
+
+    <action
+        android:id="@+id/action_plants_list"
+        app:destination="@id/plants_list_fragment"/>
+
+    <action
+        android:id="@+id/action_view_pager_fragment_to_plant_detail_fragment"
+        app:destination="@id/plant_detail_fragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
 
 </navigation>

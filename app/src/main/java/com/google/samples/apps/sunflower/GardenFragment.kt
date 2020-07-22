@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.samples.apps.sunflower.adapters.GardenPlantingAdapter
 import com.google.samples.apps.sunflower.adapters.PLANT_LIST_PAGE_INDEX
@@ -62,9 +63,7 @@ class GardenFragment : Fragment() {
         }
     }
 
-    // TODO: convert to data binding if applicable
     private fun navigateToPlantListPage() {
-        requireActivity().findViewById<ViewPager2>(R.id.view_pager).currentItem =
-            PLANT_LIST_PAGE_INDEX
+        view?.findNavController()?.navigate(NavHostDirections.actionPlantsList())
     }
 }
